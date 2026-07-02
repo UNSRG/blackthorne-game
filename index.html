@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Blackthorne</title>
-    <!-- Используем стабильную v7 версию эмулятора -->
+    <link rel="stylesheet" href="https://js-dos.com">
     <script src="https://js-dos.com"></script>
     <style>
-        html, body, #dos { width: 100%; height: 100%; margin: 0; padding: 0; background: black; overflow: hidden; }
+        html, body, #jsdos { width: 100%; height: 100%; margin: 0; padding: 0; background: black; overflow: hidden; }
     </style>
 </head>
 <body>
-    <canvas id="dos"></canvas>
+    <div id="jsdos"></div>
     <script>
-        // Запуск эмулятора и автоматическая распаковка вашего архива
-        Dos(document.getElementById("dos"))
+        Dos(document.getElementById("jsdos"))
             .run("blackthorne.zip", "bthorne.exe");
     </script>
 </body>
