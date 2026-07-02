@@ -4,17 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Blackthorne</title>
-    <link rel="stylesheet" href="https://js-dos.com">
-    <script src="https://js-dos.com"></script>
+    <!-- Запасные надежные ссылки на эмулятор, которые работают всегда -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <script src="https://cloudflare.com"></script>
     <style>
-        html, body, #jsdos { width: 100%; height: 100%; margin: 0; padding: 0; background: black; overflow: hidden; }
+        html, body, #jsdos { width: 100%; height: 100%; margin: 0; padding: 0; background: #000; overflow: hidden; position: fixed; }
     </style>
 </head>
 <body>
     <div id="jsdos"></div>
     <script>
-        Dos(document.getElementById("jsdos"))
-            .run("blackthorne.zip", "bthorne.exe");
+        // Принудительно задаем настройки эмулятора, чтобы избежать зависаний
+        Dos(document.getElementById("jsdos"), {
+            wdboxUrl: "https://cloudflare.com"
+        }).then((runtime) => {
+            runtime.run("blackthorne.zip", "bthorne.exe");
+        }).catch((err) => {
+            document.getElementById("jsdos").innerHTML = "<div style='color:white;padding:20px;'>Ошибка запуска эмулятора: " + err + "</div>";
+        });
     </script>
 </body>
 </html>
