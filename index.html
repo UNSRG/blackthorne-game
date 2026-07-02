@@ -4,60 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Blackthorne Retro Game</title>
-    <!-- Подключаем официальные стабильные скрипты напрямую из CDN JS Delivr -->
-    <link rel="stylesheet" href="https://jsdelivr.net">
-    <script src="https://jsdelivr.net"></script>
+    <!-- Используем глобальный и самый стабильный CDN Unpkg, который отдаёт готовую v7 сборку -->
+    <link rel="stylesheet" href="https://unpkg.com">
+    <script src="https://unpkg.com"></script>
     <style>
-        html, body { width: 100%; height: 100%; margin: 0; padding: 0; background-color: #000000; overflow: hidden; }
-        #jsdos { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
-        #fallback-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 15px 30px; font-size: 18px; background: #2481cc; color: white; border: none; border-radius: 8px; cursor: pointer; display: none; font-family: sans-serif; z-index: 999; }
+        html, body, #jsdos { width: 100%; height: 100%; margin: 0; padding: 0; background: #000; overflow: hidden; position: fixed; }
     </style>
 </head>
 <body>
-
-    <button id="fallback-btn" onclick="startManual()">Запустить Blackthorne</button>
     <div id="jsdos"></div>
-
     <script>
-        // Глобальные настройки плеера
-        function initDosPlayer(element) {
-            Dos(element, {
-                wdboxUrl: "https://jsdelivr.net"
-            }).then((runtime) => {
-                runtime.run("blackthorne.zip", "bthorne.exe");
-            }).catch((err) => {
-                console.error(err);
-                showError("Ошибка эмулятора: " + err);
-            });
-        }
-
-        function showError(msg) {
-            document.body.innerHTML = "<div style='color:#ff4d4d; padding:20px; font-family:sans-serif; font-size:16px; text-align:center; margin-top:20%'><h3>Произошла ошибка</h3>" + msg + "</div>";
-        }
-
-        // Автоматический старт
-        window.addEventListener("load", () => {
-            const container = document.getElementById("jsdos");
-            if (typeof Dos === "undefined") {
-                showError("Не удалось загрузить файлы JS-DOS с сервера. Попробуйте перезагрузить страницу.");
-                return;
-            }
-            
-            // Если автоматический запуск блокируется браузером, показываем кнопку
-            setTimeout(() => {
-                if (container.children.length === 0) {
-                    document.getElementById("fallback-btn").style.display = "block";
-                }
-            }, 2000);
-
-            initDosPlayer(container);
+        // Запускаем эмулятор через зеркало Unpkg, обходя блокировки основного сайта js-dos
+        Dos(document.getElementById("jsdos"), {
+            wdboxUrl: "https://unpkg.com"
+        }).then((runtime) => {
+            runtime.run("blackthorne.zip", "bthorne.exe");
+        }).catch((err) => {
+            document.getElementById("jsdos").innerHTML = "<div style='color:white;padding:20px;font-family:sans-serif;'>Ошибка запуска: " + err + "</div>";
         });
-
-        // Ручной старт по кнопке
-        function startManual() {
-            document.getElementById("fallback-btn").style.display = "none";
-            initDosPlayer(document.getElementById("jsdos"));
-        }
     </script>
 </body>
 </html>
