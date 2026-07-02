@@ -3,24 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Blackthorne Retro Game</title>
-    <!-- Используем глобальный и самый стабильный CDN Unpkg, который отдаёт готовую v7 сборку -->
-    <link rel="stylesheet" href="https://unpkg.com">
-    <script src="https://unpkg.com"></script>
+    <title>Blackthorne Retro</title>
+    <!-- Полностью автономный плеер DOSBox, скомпилированный прямо в страницу -->
+    <script src="https://jsdelivr.net"></script>
     <style>
-        html, body, #jsdos { width: 100%; height: 100%; margin: 0; padding: 0; background: #000; overflow: hidden; position: fixed; }
+        html, body { width: 100%; height: 100%; margin: 0; padding: 0; background: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
+        #canvas { width: 100vw; height: 100vh; display: block; }
+        #loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
     </style>
 </head>
 <body>
-    <div id="jsdos"></div>
+    <div id="loading">Загрузка эмулятора и Blackthorne...</div>
+    <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+
     <script>
-        // Запускаем эмулятор через зеркало Unpkg, обходя блокировки основного сайта js-dos
-        Dos(document.getElementById("jsdos"), {
-            wdboxUrl: "https://unpkg.com"
-        }).then((runtime) => {
-            runtime.run("blackthorne.zip", "bthorne.exe");
-        }).catch((err) => {
-            document.getElementById("jsdos").innerHTML = "<div style='color:white;padding:20px;font-family:sans-serif;'>Ошибка запуска: " + err + "</div>";
+        window.addEventListener("load", () => {
+            // Используем альтернативный, максимально легкий движок Emularity
+            const dosbox = new DosBox({
+                canvas: document.getElementById("canvas"),
+                onload: (box) => {
+                    document.getElementById("loading").style.display = "none";
+                    // Извлекаем архив и запускаем игру напрямую
+                    box.run("blackthorne.zip", ["bthorne.exe"]);
+                },
+                onerror: (err) => {
+                    document.getElementById("loading").innerText = "Ошибка: " + err;
+                }
+            });
         });
     </script>
 </body>
