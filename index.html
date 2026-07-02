@@ -3,23 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Blackthorne Retro</title>
-    <!-- Подключаем самую стабильную облегченную сборку JS-DOS напрямую с серверов jsDelivr -->
-    <link rel="stylesheet" href="https://jsdelivr.net">
-    <script src="https://jsdelivr.net"></script>
+    <title>Blackthorne Retro Game</title>
+    <!-- Подключаем файлы эмулятора из корня репозитория -->
+    <link rel="stylesheet" href="js-dos.css">
+    <script src="js-dos.js"></script>
     <style>
-        html, body, #dos { width: 100%; height: 100%; margin: 0; padding: 0; background: #000; overflow: hidden; position: fixed; }
+        html, body, #jsdos { width: 100%; height: 100%; margin: 0; padding: 0; background: black; overflow: hidden; position: fixed; }
     </style>
 </head>
 <body>
-    <div id="dos"></div>
+    <div id="jsdos"></div>
     <script>
-        // Специальная проверенная версия 6, которая работает без дополнительных WASM файлов на лету
-        var dosbox = new Dos(document.getElementById("dos"), {
-            wdboxUrl: "https://jsdelivr.net"
+        // Указываем путь к wdbox.js прямо в корне (без папки emulators/)
+        Dos(document.getElementById("jsdos"), {
+            wdboxUrl: "wdbox.js"
+        }).then((runtime) => {
+            // Запускаем игру
+            runtime.run("blackthorne.zip", "bthorne.exe");
+        }).catch((err) => {
+            document.getElementById("jsdos").innerHTML = "<div style='color:white;padding:20px;font-family:sans-serif;'>Ошибка запуска: " + err + "</div>";
         });
-        
-        dosbox.run("blackthorne.zip", "bthorne.exe");
     </script>
 </body>
 </html>
