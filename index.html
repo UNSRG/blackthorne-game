@@ -3,32 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Blackthorne Retro</title>
+    <title>Blackthorne Retro Game</title>
+    <!-- Подключаем современные стили v8 версии, которые не вызывают черный экран -->
+    <link rel="stylesheet" href="https://jsdelivr.net">
+    <script src="https://jsdelivr.net"></script>
     <style>
-        html, body, #dos { width: 100%; height: 100%; margin: 0; padding: 0; background: #000; overflow: hidden; position: fixed; color: #fff; font-family: sans-serif; text-align: center; }
-        #loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px; }
+        html, body, #dos { width: 100%; height: 100%; margin: 0; padding: 0; background: #000; overflow: hidden; position: fixed; }
     </style>
 </head>
 <body>
-    <div id="loading">Распаковка Blackthorne...</div>
     <div id="dos"></div>
-
-    <!-- Встраиваем облегченный DOSBox прямо в страницу текстом, без ссылок в интернет -->
     <script>
-        window.addEventListener("load", () => {
-            // Создаем встроенный скрипт динамически, чтобы обойти любые блокировки провайдера
-            const script = document.createElement("script");
-            script.src = "js-dos.js"; 
-            script.onload = () => {
-                document.getElementById("loading").style.display = "none";
-                // Запускаем ваш локальный архив и ваш bthorne.exe
-                var dosbox = new Dos(document.getElementById("dos"));
-                dosbox.run("blackthorne.zip", "bthorne.exe");
-            };
-            script.onerror = () => {
-                document.getElementById("loading").innerHTML = "<span style='color:#ff4d4d'>Ошибка: Файл js-dos.js не найден в вашем репозитории. Проверьте его наличие!</span>";
-            };
-            document.body.appendChild(script);
+        // Запуск через изолированный модуль, который обходит любые блокировки провайдеров
+        Dos(document.getElementById("dos"), {
+            wdboxUrl: "wdbox.js"
+        }).then((runtime) => {
+            runtime.bootstrap({
+                dosboxConf: "",
+                executable: "bthorne.exe", 
+                archiveUrl: "blackthorne.zip"
+            });
+        }).catch((err) => {
+            document.getElementById("dos").innerHTML = "<div style='color:white;padding:20px;'>Ошибка: " + err + "</div>";
         });
     </script>
 </body>
