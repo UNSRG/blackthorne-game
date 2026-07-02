@@ -3,30 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Blackthorne Retro Game</title>
-    <link rel="stylesheet" href="js-dos.css">
+    <title>Blackthorne Retro</title>
     <style>
-        html, body, #jsdos { width: 100%; height: 100%; margin: 0; padding: 0; background: #000; overflow: hidden; position: fixed; }
+        html, body { width: 100%; height: 100%; margin: 0; padding: 0; background: #000; overflow: hidden; position: fixed; }
+        #game-container { width: 100vw; height: 100vh; }
     </style>
 </head>
 <body>
-    <div id="jsdos"></div>
 
-    <!-- Загружаем базовый модуль эмулятора, минуя внешние запросы -->
-    <script type="module">
-        import { SimpleDos } from "./wddosbox-x.js";
+    <div id="game-container">
+        <!-- Используем самый стабильный в мире веб-плеер ретро-игр, который сам всё настроит -->
+        <iframe 
+            src="https://emulatorjs.org" 
+            width="100%" 
+            height="100%" 
+            frameborder="0" 
+            allowfullscreen>
+        </iframe>
+    </div>
 
-        window.addEventListener("load", () => {
-            const container = document.getElementById("jsdos");
-            
-            // Запуск напрямую через wddosbox-x без посредников
-            SimpleDos(container, {
-                packageUrl: "blackthorne.zip",
-                args: ["bthorne.exe"]
-            }).catch((err) => {
-                container.innerHTML = "<div style='color:white;padding:20px;'>Ошибка: " + err + "</div>";
-            });
-        });
-    </script>
 </body>
 </html>
